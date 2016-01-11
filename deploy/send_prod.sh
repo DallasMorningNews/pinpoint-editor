@@ -6,7 +6,7 @@ set -e
 SERVER=ubuntu@apps.dallasnews.com
 APP_DIR=/var/www/tools/pinpoint
 KEYFILE=~/.ssh/dmnapps.pem
-REMOTE_SCRIPT_PATH=/tmp/deploy/pinpoint.sh
+REMOTE_SCRIPT_PATH=/tmp/deploy-pinpoint.sh
 
 
 ### Library ###

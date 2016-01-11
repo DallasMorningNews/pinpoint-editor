@@ -5,6 +5,8 @@ var bodyParser = require('body-parser');
 var fs         = require('fs');
 var check      = require('./app/setup-check.js');
 
+require('dotenv').load();
+
 var port = process.env.PORT || 3001;
 
 app.use(express.static(__dirname + '/public'));
@@ -26,6 +28,3 @@ check(function(){
     });
     console.log("I'm on port " + port);
 });
-
-
-

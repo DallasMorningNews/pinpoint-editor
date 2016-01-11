@@ -5,7 +5,7 @@ set -e
 
 APP_DIR=/var/www/tools/pinpoint
 REGISTRY_DIR=/etc/nginx/sites-enabled
-GIT_URL=git://github.com/DallasMorningNews/tools/pinpoint
+GIT_URL=git://github.com/DallasMorningNews/pinpoint-editor
 RESTART_ARGS=
 
 

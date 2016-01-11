@@ -6,7 +6,7 @@ set -e
 SERVER=ubuntu@52.21.39.126
 APP_DIR=/var/www/tools/pinpoint
 KEYFILE=~/.ssh/dmnapps.pem
-REMOTE_PATH=/etc/nginx/site-locations/tools/pinpoint
+REMOTE_PATH=/etc/nginx/site-locations/pinpoint
 
 
 ### Library ###

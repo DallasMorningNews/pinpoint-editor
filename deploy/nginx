@@ -1,8 +1,8 @@
 location ~ ^/tools/pinpoint(/.*|$) {
-  alias /var/www/tools/pinpoint/public$1;
-  passenger_base_uri /tools/pinpoint;
-  passenger_app_root /var/www/tools/pinpoint;
-  passenger_document_root /var/www/tools/pinpoint/public;
+  alias /var/www/pinpoint/public$1;
+  passenger_base_uri /pinpoint;
+  passenger_app_root /var/www/pinpoint;
+  passenger_document_root /var/www/pinpoint/public;
   passenger_enabled on;
   passenger_app_type node;
   passenger_startup_file server.js;

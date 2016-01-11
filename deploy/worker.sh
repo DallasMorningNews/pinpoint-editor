@@ -16,6 +16,7 @@ set -x
 cd $APP_DIR
 git pull
 npm install --production
+bower install --production
 
 cd $REGISTRY_DIR
 git pull

@@ -25,7 +25,7 @@ fi
 
 echo
 echo "---- Pulling site from production server ----"
-run ssh $KEYARG -T $SERVER "sudo rm /etc/nginx/site-locations/tools/pinpoint"
+run ssh $KEYARG -T $SERVER "sudo rm /etc/nginx/site-locations/pinpoint"
 echo
 echo "---- Restarting nginx on production server ----"
 run ssh $KEYARG -T $SERVER "sudo service nginx restart"

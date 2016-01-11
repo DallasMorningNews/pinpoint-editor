@@ -180,7 +180,7 @@ function process_publish(id, location, res){
 			var file   = location + '/locator-maps/' + slug + '.json';
 
 			var publish   = s3.put(file, {
-			    'Content-Length': Buffer.byteLength(string),
+		    'Content-Length': Buffer.byteLength(string),
 				'Content-Type': 'application/json',
 				'x-amz-acl': 'public-read'
 			});
@@ -200,6 +200,6 @@ function process_publish(id, location, res){
 
 		})
 		.catch(function(error) {
-			res.json({error: error});
+			res.status(500).json({error: error});
 		});
 }

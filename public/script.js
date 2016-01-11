@@ -360,7 +360,6 @@ pinpointTool.factory('dataWrangler', ['mapHelper', 'markerStyles', function(mapH
             'labelDirections',
             'latLonString',
             'el',
-            'id',
             'aspectRatio',
             'minimapZoomOffset',
             'labelDirection',
@@ -383,7 +382,7 @@ pinpointTool.factory('dataWrangler', ['mapHelper', 'markerStyles', function(mapH
             delete output.markers;
         }
         return output;
-    }
+    };
     var setupExisting = function(scope) {
         if (scope.map.lat && scope.map.lon) {
             scope.map.latLonString = scope.map.lat + ',' + scope.map.lon;
@@ -410,7 +409,7 @@ pinpointTool.factory('dataWrangler', ['mapHelper', 'markerStyles', function(mapH
 
         return scope;
 
-    }
+    };
     var watch = function(map){
         map.zoom = parseInt( map.zoom );
         map.lat = mapHelper.splitLatLonString(map.latLonString)[0];
@@ -426,12 +425,12 @@ pinpointTool.factory('dataWrangler', ['mapHelper', 'markerStyles', function(mapH
         });
 
         return map;
-    }
+    };
     return {
         cleanMapObj: clean,
         setupExisting: setupExisting,
         onWatch: watch
-    }
+    };
 }]);
 
 /////////////////

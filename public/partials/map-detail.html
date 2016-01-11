@@ -1,7 +1,7 @@
     <div class="container">
         <div class="row"  ng-if="map">
             <div class="page-header">
-              <a href="/#/tools/pinpoint/maps">< Back to all maps</a>
+              <a href="/tools/pinpoint/#/maps">< Back to all maps</a>
               <div ng-click="save()" ng-disabled="mapform.$pristine || saving || !mapform.$valid" class="btn btn-primary save-button">Save</div>
               <div ng-click="showPublishModal()" class="btn btn-default">Publish...</div>
               <a class="btn btn-default" preview-link slug="{{map.slug}}" aspect-ratio="{{map['aspect-ratio']}}"  ng-if="config.previewLink">Preview</a>

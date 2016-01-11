@@ -13,12 +13,12 @@
 
     <div class="col-md-4">
         <div class="thumbnail new-map">
-            <p><a class="btn btn-primary" href="/#/tools/pinpoint/maps/new">Create new map</a></p>
+            <p><a class="btn btn-primary" href="/tools/pinpoint/#/maps/new">Create new map</a></p>
         </div>
     </div>
 
     <div ng-repeat="(i, map) in maps" class="col-md-4">
-        <a href="/#/tools/pinpoint/maps/{{map.id}}" class="thumbnail">
+        <a href="/tools/pinpoint/#/maps/{{map.id}}" class="thumbnail">
             <!-- <div class="prevmap" id="prevmap-{{i}}"></div> -->
             <map-rough-preview lat="{{map.lat}}" lon="{{map.lon}}" zoom="{{map.zoom}}"></map-rough-preview>
             <div class="caption">
@@ -35,7 +35,7 @@
 
 <div ng-if="listView">
 
-    <p><a href="/#/tools/pinpoint/maps/new">Create new map</a></p>
+    <p><a href="/tools/pinpoint/#/maps/new">Create new map</a></p>
 
 
     <table class="table">
@@ -47,7 +47,7 @@
             <th></th>
         </tr>
         <tr ng-repeat="(i, map) in maps">
-            <td><a href="/#/tools/pinpoint/maps/{{map.id}}">{{map.slug}}</a></td>
+            <td><a href="/tools/pinpoint/#/maps/{{map.id}}">{{map.slug}}</a></td>
             <td>{{map.hed}}</td>
             <td>{{map.modification_date | date:"MM/dd/yyyy 'at' h:mma"}}</td>
             <td><a preview-link slug="{{map.slug}}" aspect-ratio="{{map['aspect-ratio']}}">Preview</a></td>

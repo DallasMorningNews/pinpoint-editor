@@ -20,7 +20,7 @@
 					}
 				}
 
-				$http.get('/api/slugs').success( function (slugs) {
+				$http.get('/tools/pinpoint/api/slugs').success( function (slugs) {
 					$scope.slug = slugs;
 					validate(ngModel.$viewValue);
 				});

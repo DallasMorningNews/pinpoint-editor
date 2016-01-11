@@ -6,7 +6,7 @@ set -e
 SERVER=ubuntu@52.21.39.126
 APP_DIR=/var/www/tools/pinpoint
 KEYFILE=~/.ssh/dmnapps.pem
-REMOTE_SCRIPT_PATH=/tmp/deploy-tools/pinpoint.sh
+REMOTE_SCRIPT_PATH=/tmp/deploy/pinpoint.sh
 
 
 ### Library ###

@@ -4,7 +4,7 @@ set -e
 ### Configuration ###
 
 SERVER=ubuntu@apps.dallasnews.com
-APP_DIR=/var/www/tools/pinpoint
+APP_DIR=/var/www/pinpoint
 KEYFILE=~/.ssh/dmnapps.pem
 REMOTE_PATH=/etc/nginx/site-locations/pinpoint
 

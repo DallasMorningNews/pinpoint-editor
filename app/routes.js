@@ -2,7 +2,7 @@ var moment     = require('moment');
 var _          = require('lodash');
 var fs         = require('fs');
 var knox       = require('knox');
-var config     = require('../public/config');
+var config     = require('../config');
 
 var pg = require('knex')({
 	client: 'pg',
@@ -21,7 +21,7 @@ module.exports = function(app) {
 
 	var prefix = process.env.SUBDIR || '';
 
-	app.get('/public/config.json', function(req, res) {
+	app.get(prefix + '/config.json', function(req, res) {
         if (process.env.AWS_S3_KEY) {
             config.s3enabled = true;
         }

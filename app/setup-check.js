@@ -1,6 +1,6 @@
 module.exports = function( callback ){
     var fs = require('fs');
-    var config = fs.readFileSync('public/config.json', 'utf8');
+    var config = fs.readFileSync('./config.json', 'utf8');
     if (!testJSON(config)) {
         throw('Error: config.json is missing or invalid.');
     }

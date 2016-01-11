@@ -3,7 +3,7 @@ set -e
 
 ### Configuration ###
 
-APP_DIR=/var/www/tools/pinpoint
+APP_DIR=/var/www/pinpoint
 REGISTRY_DIR=/etc/nginx/sites-enabled
 GIT_URL=git://github.com/DallasMorningNews/pinpoint-editor
 RESTART_ARGS=

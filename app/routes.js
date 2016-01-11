@@ -2,7 +2,7 @@ var moment     = require('moment');
 var _          = require('lodash');
 var fs         = require('fs');
 var knox       = require('knox');
-var config     = require('../config');
+var config     = require('../public/config');
 
 var pg = require('knex')({
 	client: 'pg',
@@ -19,22 +19,24 @@ if (process.env.AWS_S3_KEY) {
 
 module.exports = function(app) {
 
-	app.get('/config.json', function(req, res) {
+	var prefix = process.env.SUBDIR || '';
+
+	app.get('/public/config.json', function(req, res) {
         if (process.env.AWS_S3_KEY) {
             config.s3enabled = true;
         }
 		res.json( config );
 	});
 
-	app.get('/_health', function (req, res) {
+	app.get(prefix + '/_health', function (req, res) {
 		res.send("I'm alive.");
 	});
 
 	// API
-	app.get('/api/maps', function(req, res) {
+	app.get(prefix + '/api/maps', function(req, res) {
 		pg('locator_map')
 			.then(function(rows) {
-				var rows = parse_data(rows);
+				rows = parse_data(rows);
 				res.json(rows);
 			})
 			.catch(function(error) {
@@ -42,13 +44,13 @@ module.exports = function(app) {
 			});
 	});
 
-	app.get('/api/maps/slug/:slug', function(req, res) {
+	app.get(prefix + '/api/maps/slug/:slug', function(req, res) {
 		var slug = req.params.slug;
 
 		pg('locator_map')
 			.whereRaw("data->>'slug' = ?", slug)
 			.then(function(rows) {
-				var rows = parse_data(rows);
+				rows = parse_data(rows);
 				res.json(rows[0]);
 			})
 			.catch(function(error) {
@@ -56,13 +58,13 @@ module.exports = function(app) {
 			});
 	});
 
-	app.get('/api/maps/:id', function(req, res) {
+	app.get(prefix + '/api/maps/:id', function(req, res) {
 		var id = req.params.id;
 
 		pg('locator_map')
 			.where('id', id)
 			.then(function(rows) {
-				var rows = parse_data(rows);
+				rows = parse_data(rows);
 				res.json(rows[0]);
 			})
 			.catch(function(error) {
@@ -70,7 +72,7 @@ module.exports = function(app) {
 			});
 	});
 
-	app.post('/api/maps', function(req, res) {
+	app.post(prefix + '/api/maps', function(req, res) {
 		var data = req.body;
 			data.creation_date = Date.now();
 			data.modification_date = Date.now();
@@ -89,7 +91,7 @@ module.exports = function(app) {
 			});
 	});
 
-	app.put('/api/maps/:id', function(req, res) {
+	app.put(prefix + '/api/maps/:id', function(req, res) {
 		var id = req.params.id;
 		var data = req.body;
 			delete data.id;
@@ -110,7 +112,7 @@ module.exports = function(app) {
 			});
 	});
 
-	app.delete('/api/maps/:id', function(req, res){
+	app.delete(prefix + '/api/maps/:id', function(req, res){
 		var id = req.params.id;
 		var location = 'projects';
 
@@ -122,7 +124,7 @@ module.exports = function(app) {
 
 				s3.del(location + '/locator-maps/' + slug + '.json')
 					.on('response', function(res){
-						// 
+						//
 					}).end();
 
 				return pg('locator_map').where('id', id).del();
@@ -137,10 +139,10 @@ module.exports = function(app) {
 			});
 	});
 
-	app.get('/api/slugs', function(req, res) {
+	app.get(prefix + '/api/slugs', function(req, res) {
 		pg('locator_map')
 			.then(function(rows) {
-				var rows = parse_data(rows);
+				rows = parse_data(rows);
 				var slugs = _.pluck(rows, 'slug');
 				res.json(slugs);
 			})
@@ -149,14 +151,14 @@ module.exports = function(app) {
 			});
 	});
 
-	app.post('/api/publish', function(req, res) {
+	app.post(prefix + '/api/publish', function(req, res) {
 		var id = req.body.id;
 		var location = 'projects';
-		
+
 		process_publish(id, location, res);
 	});
 
-}
+};
 
 function parse_data(data){
 	var rows = _.map(data, function(row){
@@ -172,11 +174,11 @@ function process_publish(id, location, res){
 	pg('locator_map')
 		.where('id', id)
 		.then(function(rows) {
-			var rows   = parse_data(rows);
+			rows   		 = parse_data(rows);
 			var string = JSON.stringify(rows[0]);
 			var slug   = rows[0].slug;
 			var file   = location + '/locator-maps/' + slug + '.json';
-			
+
 			var publish   = s3.put(file, {
 			    'Content-Length': Buffer.byteLength(string),
 				'Content-Type': 'application/json',

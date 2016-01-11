@@ -63,7 +63,7 @@ pinpointTool.controller('mapDetailCtrl',
         $scope.map = $.extend({}, mapDefaults.map);
         $scope.map.aspectRatio = $scope.map['aspect-ratio'];
     } else {
-        $http.get('/api/maps/'+$scope.mapId)
+        $http.get('api/maps/'+$scope.mapId)
         .success(function(data) {
             $scope.map = data;
             $.extend({}, mapDefaults.map, $scope.map);
@@ -175,7 +175,7 @@ pinpointTool.controller('mapDetailCtrl',
         if ($scope.map.id && ($scope.map.id !== 'new')) {
             // update map
             $http
-                .put('/api/maps/'+$scope.mapId, clean)
+                .put('api/maps/'+$scope.mapId, clean)
                 .success(function(){
                     $scope.saving = false;
                     $scope.$$childHead.mapform.$setPristine();
@@ -183,7 +183,7 @@ pinpointTool.controller('mapDetailCtrl',
         } else {
             // create a new map
             $http
-                .post('/api/maps/', clean)
+                .post('api/maps/', clean)
                 .success(function(d){
                     $scope.map.id = d.id;
                     $scope.saving = false;
@@ -199,7 +199,7 @@ pinpointTool.controller('mapDetailCtrl',
         var dirty = JSON.parse(JSON.stringify($scope.map));
         var clean = dataWrangler.cleanMapObj(dirty);
     $http
-        .post('/api/publish/', clean)
+        .post('api/publish/', clean)
         .success(function(e,r){
             $scope.$$childHead.mapform.$setPristine();
             $scope.published = true;
@@ -218,7 +218,7 @@ pinpointTool.controller('mapDetailCtrl',
         if ($scope.map.id && ($scope.map.id !== 'new')) {
             // existing map
             $http
-                .delete('/api/maps/'+$scope.map.id)
+                .delete('api/maps/'+$scope.map.id)
                 .success(function(e,r){
                     alert('Map deleted');
                     $scope.bypassSaveDialog = true;
@@ -444,7 +444,7 @@ pinpointTool.controller('mapListCtrl',
     $scope.changeView = function(){
         $scope.listView = !$scope.listView;
     }
-    $http.get('/api/maps').success(function(data) {
+    $http.get('api/maps').success(function(data) {
         $scope.maps = data;
         $scope.maps = $filter('orderBy')($scope.maps, 'creation_date', true);
     });

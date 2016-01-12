@@ -15,13 +15,17 @@
     "lodash": "^3.1.0",
     "moment": "^2.9.0",
     "morgan": "~1.2.2",
-    "pg": "^4.2.0"
+    "pg": "^4.2.0",
+    "dotenv": "^1.2.0"
   },
   "devDependencies": {
     "karma": "~0.12.31",
     "jasmine-core": "~2.2.0",
     "karma-jasmine": "~0.3.5",
     "karma-chrome-launcher": "~0.1.7",
-    "karma-phantomjs-launcher": "~0.1.4"
+    "karma-phantomjs-launcher": "~0.1.4",
+    "gulp": "^3.9.0",
+    "gulp-confirm": "^1.0.4",
+    "shelljs": "^0.5.3"
   }
 }

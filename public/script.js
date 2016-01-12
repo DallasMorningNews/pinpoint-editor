@@ -14,7 +14,7 @@ pinpointTool.provider('configService', function () {
 })
 
 angular.element(document).ready(function () {
-    $.get('/config.json', function (data) {
+    $.get('config.json', function (data) {
 
         angular.module('pinpointTool').config(['configServiceProvider', function (configServiceProvider) {
             configServiceProvider.config(data);
@@ -42,7 +42,7 @@ pinpointTool.config(['$routeProvider',
       otherwise({
         redirectTo: '/maps'
       });
-  }]);  
+  }]);
 
 /////////////////
 // EDITOR
@@ -51,25 +51,25 @@ pinpointTool.config(['$routeProvider',
 pinpointTool.controller('mapDetailCtrl',
   ['$scope', '$routeParams', '$http', '$location', 'mapHelper', 'markerStyles', 'mapDefaults', 'dataWrangler', 'configService',
   function ($scope, $routeParams, $http, $location, mapHelper, markerStyles, mapDefaults, dataWrangler, configService ) {
-    
+
     $scope.mapId = $routeParams['mapId'];
     $scope.icons = markerStyles.icons;
     $scope.labels = markerStyles.labels;
     $scope.aspectRatios = ['wide','square','tall'];
     $scope.pickedLocation = {};
     $scope.config = configService;
-        
+
     if ($scope.mapId === 'new') {
         $scope.map = $.extend({}, mapDefaults.map);
         $scope.map.aspectRatio = $scope.map['aspect-ratio'];
     } else {
-        $http.get('/api/maps/'+$scope.mapId)
+        $http.get('api/maps/'+$scope.mapId)
         .success(function(data) {
             $scope.map = data;
             $.extend({}, mapDefaults.map, $scope.map);
-        
+
             $scope = dataWrangler.setupExisting($scope);
-        
+
         })
         .error(function(){
             $location.path('/maps');
@@ -83,7 +83,7 @@ pinpointTool.controller('mapDetailCtrl',
             $scope.pinpoint = mapHelper.buildPreview($scope.map, changeMap, changeMap, changeMarker);
         }
     });
-    
+
     $scope.$watch('quickstartLatLonString', function(val){
         if (val) {
             $scope.map.latLonString = val;
@@ -92,24 +92,24 @@ pinpointTool.controller('mapDetailCtrl',
                 lon: val.split(',')[1]
             }
             $scope.addMarker( coords, $scope.quickstartName );
-            
+
         }
     });
-    
+
     $scope.showPublishModal = function(){
         $scope.publishModal = true;
     }
     $scope.hidePublishModal = function(){
         $scope.publishModal = false;
     }
-    
+
     $scope.$watch('map.published', function(val){
         if (val === true) {
             $scope.save();
         }
     });
 
-    
+
     function changeMap(ev){
         var newLatLon = ev.target.getCenter();
         var newZoom = ev.target.getZoom();
@@ -131,7 +131,7 @@ pinpointTool.controller('mapDetailCtrl',
         $scope.$apply();
     }
 
-    
+
     $scope.$on('$destroy', function() {
        window.onbeforeunload = undefined;
     });
@@ -142,9 +142,9 @@ pinpointTool.controller('mapDetailCtrl',
             }
         }
     });
-    
 
-    
+
+
     $scope.removeMarker = function(marker){
         var index = $scope.map.markers.indexOf(marker);
         if (index > -1) {
@@ -155,7 +155,7 @@ pinpointTool.controller('mapDetailCtrl',
         if ($scope.map.markers.length > 4) {
             return;
         }
-        
+
         var newMarker = $.extend({}, mapDefaults.marker);
         if ($scope.pinpoint) {
             center = center || $scope.pinpoint.map.getCenter();
@@ -167,7 +167,7 @@ pinpointTool.controller('mapDetailCtrl',
         newMarker.labelDirection = newMarker['label-direction'];
         $scope.map.markers.push( newMarker );
     }
-        
+
     $scope.save = function(){
         $scope.saving = true;
         var dirty = JSON.parse(JSON.stringify($scope.map));
@@ -175,7 +175,7 @@ pinpointTool.controller('mapDetailCtrl',
         if ($scope.map.id && ($scope.map.id !== 'new')) {
             // update map
             $http
-                .put('/api/maps/'+$scope.mapId, clean)
+                .put('api/maps/'+$scope.mapId, clean)
                 .success(function(){
                     $scope.saving = false;
                     $scope.$$childHead.mapform.$setPristine();
@@ -183,7 +183,7 @@ pinpointTool.controller('mapDetailCtrl',
         } else {
             // create a new map
             $http
-                .post('/api/maps/', clean)
+                .post('api/maps/', clean)
                 .success(function(d){
                     $scope.map.id = d.id;
                     $scope.saving = false;
@@ -199,7 +199,7 @@ pinpointTool.controller('mapDetailCtrl',
         var dirty = JSON.parse(JSON.stringify($scope.map));
         var clean = dataWrangler.cleanMapObj(dirty);
     $http
-        .post('/api/publish/', clean)
+        .post('api/publish/', clean)
         .success(function(e,r){
             $scope.$$childHead.mapform.$setPristine();
             $scope.published = true;
@@ -218,7 +218,7 @@ pinpointTool.controller('mapDetailCtrl',
         if ($scope.map.id && ($scope.map.id !== 'new')) {
             // existing map
             $http
-                .delete('/api/maps/'+$scope.map.id)
+                .delete('api/maps/'+$scope.map.id)
                 .success(function(e,r){
                     alert('Map deleted');
                     $scope.bypassSaveDialog = true;
@@ -228,11 +228,11 @@ pinpointTool.controller('mapDetailCtrl',
                     alert('Not deleted due to error');
                     $scope.deleteModal = false;
                 });
-            
+
         } else {
             $scope.bypassSaveDialog = true;
             $location.path('/maps/');
-            
+
         }
     }
 
@@ -248,7 +248,7 @@ pinpointTool.factory('mapHelper', ['configService', function(configService) {
         opts.markerdragend = markerdragend;
         opts.basemap = configService.basemap;
         opts.basemapCredit = configService.basemapCredit;
-        
+
         $('.map-outer.inactive').html('<div id="map"></div>');
         if (typeof p !== 'undefined') {
             try {
@@ -273,7 +273,7 @@ pinpointTool.factory('mapHelper', ['configService', function(configService) {
         var lon = +string.replace(/\s/g,'').split(',')[1];
         return [lat, lon];
     }
-    
+
     return {
         buildPreview: build,
         splitLatLonString: splitLatLonString
@@ -281,7 +281,7 @@ pinpointTool.factory('mapHelper', ['configService', function(configService) {
 }]);
 
 pinpointTool.factory('markerStyles', function() {
-    
+
     var icons = [
         "square",
         "circle",
@@ -323,7 +323,7 @@ pinpointTool.factory('markerStyles', function() {
     labels_obj.forEach(function(l){
         labels_directions[l.name] = l.directions;
     });
-    
+
     return {
         icons: icons,
         labels: labels,
@@ -360,7 +360,6 @@ pinpointTool.factory('dataWrangler', ['mapHelper', 'markerStyles', function(mapH
             'labelDirections',
             'latLonString',
             'el',
-            'id',
             'aspectRatio',
             'minimapZoomOffset',
             'labelDirection',
@@ -381,9 +380,9 @@ pinpointTool.factory('dataWrangler', ['mapHelper', 'markerStyles', function(mapH
         }
         if (output.markers.length === 0) {
             delete output.markers;
-        }       
+        }
         return output;
-    }
+    };
     var setupExisting = function(scope) {
         if (scope.map.lat && scope.map.lon) {
             scope.map.latLonString = scope.map.lat + ',' + scope.map.lon;
@@ -392,11 +391,11 @@ pinpointTool.factory('dataWrangler', ['mapHelper', 'markerStyles', function(mapH
         }
         scope.map.minimapZoomOffset = scope.map['minimap-zoom-offset'];
         scope.map.aspectRatio = scope.map['aspect-ratio'];
-            
+
         if (typeof scope.map.minimapZoomOffset !== 'number')  {
             scope.map.minimapZoomOffset = -5;
         }
-            
+
         $.each(scope.map.markers, function(i,m){
             if (m.lat && m.lon) {
                 m.latLonString = m.lat + ',' + m.lon;
@@ -407,10 +406,10 @@ pinpointTool.factory('dataWrangler', ['mapHelper', 'markerStyles', function(mapH
             m['label-direction'] = m['label-direction'] || m.labelDirections[0];
             scope.map.markers[i] = m;
         });
-        
+
         return scope;
-        
-    }
+
+    };
     var watch = function(map){
         map.zoom = parseInt( map.zoom );
         map.lat = mapHelper.splitLatLonString(map.latLonString)[0];
@@ -424,14 +423,14 @@ pinpointTool.factory('dataWrangler', ['mapHelper', 'markerStyles', function(mapH
             m.lon = mapHelper.splitLatLonString(m.latLonString)[1];
             map.markers[i] = m;
         });
-        
+
         return map;
-    }
+    };
     return {
         cleanMapObj: clean,
         setupExisting: setupExisting,
         onWatch: watch
-    }
+    };
 }]);
 
 /////////////////
@@ -444,11 +443,11 @@ pinpointTool.controller('mapListCtrl',
     $scope.changeView = function(){
         $scope.listView = !$scope.listView;
     }
-    $http.get('/api/maps').success(function(data) {
+    $http.get('api/maps').success(function(data) {
         $scope.maps = data;
         $scope.maps = $filter('orderBy')($scope.maps, 'creation_date', true);
     });
-        
+
     $scope.previewLink = function(map){
         if (map['aspect-ratio'] === 'wide') {
             var layout = 'offset';
@@ -462,11 +461,5 @@ pinpointTool.controller('mapListCtrl',
         var url = configService.liveLink+attr.slug;
         return url;
     }
-    
+
 }]);
-
-
-
-
-
-
